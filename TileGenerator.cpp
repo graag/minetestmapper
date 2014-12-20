@@ -51,9 +51,9 @@ static inline unsigned int getpixel(FIBITMAP *i, unsigned int x, unsigned int y)
 static inline void putpixel(FIBITMAP *i, unsigned int x, unsigned int y, unsigned int c)
 {
 	RGBQUAD col;
-	col.rgbRed = c & 0xff;
+	col.rgbRed = (c >> 16) & 0xff;
 	col.rgbGreen = (c >> 8) & 0xff;
-	col.rgbBlue = (c >> 16) & 0xff;
+	col.rgbBlue = c & 0xff;
 	FreeImage_SetPixelColor(i, x, y, &col);
 }
 
