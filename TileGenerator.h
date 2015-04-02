@@ -100,6 +100,7 @@ private:
 	bool m_drawScale;
 	bool m_drawAlpha;
 	bool m_shading;
+        bool m_fixedSize;
 	std::string m_backend;
 	int m_border;
 

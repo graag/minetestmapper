@@ -108,6 +108,7 @@ TileGenerator::TileGenerator():
 	m_drawScale(false),
 	m_drawAlpha(false),
 	m_shading(true),
+        m_fixedSize(false),
 	m_backend(""),
 	m_border(0),
 	m_image(0),
@@ -205,6 +206,7 @@ void TileGenerator::setGeometry(int x, int y, int w, int h)
 	m_geomY  = round_multiple_nosign(y, 16) / 16;
 	m_geomX2 = round_multiple_nosign(x + w, 16) / 16;
 	m_geomY2 = round_multiple_nosign(y + h, 16) / 16;
+	m_fixedSize = true;
 }
 
 void TileGenerator::setMinY(int y)
@@ -316,7 +318,7 @@ void TileGenerator::loadBlocks()
 	for (std::vector<BlockPos>::iterator it = vec.begin(); it != vec.end(); ++it) {
 		BlockPos pos = *it;
 		// Check that it's in geometry (from --geometry option)
-		if (pos.x < m_geomX || pos.x >= m_geomX2 || pos.z < m_geomY || pos.z >= m_geomY2) {
+		if (m_fixedSize && pos.x < m_geomX || pos.x >= m_geomX2 || pos.z < m_geomY || pos.z >= m_geomY2) {
 			continue;
 		}
 		// Check that it's between --miny and --maxy
@@ -340,6 +342,12 @@ void TileGenerator::loadBlocks()
 	}
 	m_positions.sort();
 	m_positions.unique();
+	if(m_fixedSize) {
+		m_xMin = m_geomX;
+		m_xMax = m_geomX2;
+		m_zMin = m_geomY;
+		m_zMax = m_geomY2;
+	}
 }
 
 void TileGenerator::createImage()
